@@ -82,8 +82,8 @@ class Task(Resource):
 app = Flask(__name__)
 api = Api(app)
 api.add_resource(Index, '/api')
-api.add_resource(TaskList, '/api/tasks')
-# api.add_resource(Task, '/api/task/<int:id>')
+api.add_resource(TaskList, '/api/v1/tasks')
+# api.add_resource(Task, '/api/v1/task/<int:id>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
