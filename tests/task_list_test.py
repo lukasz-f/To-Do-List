@@ -6,21 +6,19 @@ class TaskListTest(TestCase):
     def test_get_returns_json_200(self):
         r = requests.get('http://localhost:5000/api/v1/tasks')
         self.assertEqual(r.headers['Content-Type'], 'application/json')
-        self.assertTrue(r.status_code == requests.codes.ok)
+        self.assertEqual(r.status_code, requests.codes.ok)
 
-    def test_post_status(self):
+    def test_create_returns_json_201(self):
         r = requests.post('http://localhost:5000/api/v1/tasks', data={'content': 'new task'})
-        self.assertTrue(r.status_code == requests.codes.created)
+        creation_date = r.json()['creation_date']
+        id_ = r.json()['id']
 
-    def test_post_increases_task_number(self):
-        r = requests.get('http://localhost:5000/api/v1/tasks')
-        task_number = len(r.json())
-
-        requests.post('http://localhost:5000/api/v1/tasks', data={'content': 'task 2'})
-
-        r = requests.get('http://localhost:5000/api/v1/tasks')
-        new_task_number = len(r.json())
-        self.assertGreater(new_task_number, task_number)
+        self.assertEqual(r.status_code, requests.codes.created)
+        self.assertEqual(r.json(), {'content': 'new task',
+                                    'completed': False,
+                                    'id': id_,
+                                    'creation_date': creation_date,
+                                    'uri': '/api/v1/task/' + str(id_)})
 
 
 if __name__ == '__main__':
