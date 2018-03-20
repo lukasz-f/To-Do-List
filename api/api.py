@@ -97,9 +97,9 @@ class Task(Resource):
 
 app = Flask(__name__)
 api = Api(app)
-api.add_resource(Index, '/api')
-api.add_resource(TaskList, '/api/v1/tasks')
-api.add_resource(Task, '/api/v1/task/<int:id>', endpoint='message_endpoint')
+api.add_resource(Index, '/todo/api')
+api.add_resource(TaskList, '/todo/api/v1.0/tasks')
+api.add_resource(Task, '/todo/api/v1.0/task/<int:id>', endpoint='message_endpoint')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
