@@ -31,8 +31,8 @@ class TaskManager:
 
 
 task_manager = TaskManager()
-task_manager.insert_task(Task('task', datetime.now()))
-task_manager.insert_task(Task('task', datetime.utcnow()))
+# task_manager.insert_task(Task('default task 1', datetime.now()))
+# task_manager.insert_task(Task('default task 2', datetime.utcnow()))
 
 task_fields = {
     'id': fields.Integer,
