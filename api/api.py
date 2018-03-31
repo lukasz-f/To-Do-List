@@ -3,7 +3,7 @@ from flask_restful import Api, Resource, marshal_with, fields, abort, reqparse
 import requests
 from datetime import datetime
 from pytz import timezone
-from models import TaskModel
+from models import Task
 
 
 class TaskManager:
@@ -31,8 +31,8 @@ class TaskManager:
 
 
 task_manager = TaskManager()
-task_manager.insert_task(TaskModel('task', datetime.now()))
-task_manager.insert_task(TaskModel('task', datetime.utcnow()))
+task_manager.insert_task(Task('task', datetime.now()))
+task_manager.insert_task(Task('task', datetime.utcnow()))
 
 task_fields = {
     'id': fields.Integer,
@@ -43,12 +43,12 @@ task_fields = {
 }
 
 
-class Index(Resource):
+class IndexResource(Resource):
     def get(self):
         return 'To-Do List REST app'
 
 
-class TaskList(Resource):
+class TaskListResource(Resource):
     @marshal_with(task_fields)
     def get(self):
         return task_manager.get_all_tasks()
@@ -58,7 +58,7 @@ class TaskList(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('content', type=str, required=True, help="Content can't be blank")
         args = parser.parse_args()
-        task = TaskModel(
+        task = Task(
             content=args['content'],
             creation_date=datetime.now(tz=timezone('Europe/Warsaw'))
         )
@@ -66,7 +66,7 @@ class TaskList(Resource):
         return task, requests.codes.created
 
 
-class Task(Resource):
+class TaskResource(Resource):
     def abort_if_task_doesnt_exist(self, id):
         if id not in task_manager.tasks:
             abort(requests.codes.not_found, content="Task {0} doesn't exist".format(id))
@@ -97,9 +97,9 @@ class Task(Resource):
 
 app = Flask(__name__)
 api = Api(app)
-api.add_resource(Index, '/todo/api')
-api.add_resource(TaskList, '/todo/api/v1.0/tasks')
-api.add_resource(Task, '/todo/api/v1.0/task/<int:id>', endpoint='message_endpoint')
+api.add_resource(IndexResource, '/todo/api')
+api.add_resource(TaskListResource, '/todo/api/v1.0/tasks')
+api.add_resource(TaskResource, '/todo/api/v1.0/task/<int:id>', endpoint='message_endpoint')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
