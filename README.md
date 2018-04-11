@@ -21,3 +21,7 @@
 - marshmallow
 - marshmallow-sqlalchemy
 - Flask-Marshmallow
+
+### App versions
+- v1.0: api.py: simple in-memory dictionary implementation
+- v2.0: run.py: SQLite implementation
