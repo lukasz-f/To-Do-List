@@ -3,6 +3,11 @@ import requests
 
 
 class TaskTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        requests.post('http://localhost:5000/todo/api/v1.0/tasks', data={'content': 'default task 1'})
+        requests.post('http://localhost:5000/todo/api/v1.0/tasks', data={'content': 'default task 2'})
+
     def test_get_returns_200(self):
         r = requests.get('http://localhost:5000/todo/api/v1.0/task/1')
         self.assertEqual(r.status_code, requests.codes.ok)

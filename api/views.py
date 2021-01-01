@@ -80,4 +80,4 @@ class TaskListResource(Resource):
 
 
 api.add_resource(TaskListResource, '/tasks')
-api.add_resource(TaskResource, '/tasks/<int:id>')
+api.add_resource(TaskResource, '/task/<int:id>')
