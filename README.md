@@ -1,27 +1,19 @@
 ## To-Do-List
 
-### Python + REST + Flask + Marshmallow + SQLAlchemy + SQLite + unittest
+### Python + REST + API Versioning + Flask + Flask-RESTful + Marshmallow + SQLAlchemy + SQLite + unittest
 
 ### REST API:
-- localhost:5000/todo/api/v1.0/tasks GET; 200 OK - return all tasks
-- tasks POST; 201 Created - create task
-- tasks/{id} GET; 200 OK, 404 Not Found - get task with id
-- tasks/{id} PATCH; 200 OK, 400 Bad Request, 404 Not Found - update task with id
-- tasks/{id} DELETE; 204 No Content, 404 Not Found - delete task with id
+- GET /api/v1/tasks - 200 OK - return all tasks
+- POST /api/v1/tasks - 201 Created - create task
+- GET /api/v1/task/{id} - 200 OK - 404 Not Found - get task with id
+- PATCH /api/v1/task/{id} - 200 OK - 400 Bad Request - 404 Not Found - update task with id
+- DELETE /api/v1/task/{id} - 204 No Content - 404 Not Found - delete task with id
 
 ### Prerequisites
-- Python 3.6
+- Python 3.8
+- pyenv
 - virtualenv
-- pip
-- requests
-- flask-restful
-- Flask-SQLAlchemy
-- Flask-Migrate
-- Flask-Script
-- marshmallow
-- marshmallow-sqlalchemy
-- Flask-Marshmallow
 
 ### App versions
-- v1.0: api.py: simple in-memory dictionary implementation
-- v2.0: run.py: SQLite implementation
+- v1: simple in-memory dictionary implementation
+- v2: SQLite implementation
