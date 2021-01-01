@@ -1,9 +1,16 @@
-from flask import Flask
+from flask import Blueprint
 from flask_restful import Api, Resource, marshal_with, fields, abort, reqparse
 import requests
 from datetime import datetime
 from pytz import timezone
-from models import Task
+
+
+class Task:
+    def __init__(self, content, creation_date):
+        self.id = 0  # We will automatically generate the new id
+        self.content = content
+        self.creation_date = creation_date
+        self.completed = False
 
 
 class TaskManager:
@@ -31,12 +38,12 @@ class TaskManager:
 
 
 task_manager = TaskManager()
-task_manager.insert_task(Task('task', datetime.now()))
-task_manager.insert_task(Task('task', datetime.utcnow()))
+task_manager.insert_task(Task('task 1', datetime.now()))
+task_manager.insert_task(Task('task 2', datetime.utcnow()))
 
 task_fields = {
     'id': fields.Integer,
-    'uri': fields.Url('message_endpoint'),
+    'uri': fields.Url('api_v1.message_endpoint'),
     'content': fields.String,
     'creation_date': fields.DateTime(dt_format='iso8601'),
     'completed': fields.Boolean
@@ -95,11 +102,8 @@ class TaskResource(Resource):
         return task_manager.delete_task(id), requests.codes.no_content
 
 
-app = Flask(__name__)
-api = Api(app)
-api.add_resource(IndexResource, '/todo/api')
-api.add_resource(TaskListResource, '/todo/api/v1.0/tasks')
-api.add_resource(TaskResource, '/todo/api/v1.0/task/<int:id>', endpoint='message_endpoint')
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+api_v1_bp = Blueprint('api_v1', __name__)
+api = Api(api_v1_bp)
+api.add_resource(IndexResource, '/')
+api.add_resource(TaskListResource, '/tasks')
+api.add_resource(TaskResource, '/task/<int:id>', endpoint='message_endpoint')
