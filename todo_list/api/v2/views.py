@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from flask_restful import Api, Resource
-from todo_list.models.models import db, Task, TaskSchema
+from todo_list.models.db.task import db, Task, TaskSchema
 from sqlalchemy.exc import SQLAlchemyError
 import requests
 from datetime import datetime
