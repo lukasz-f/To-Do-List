@@ -4,7 +4,7 @@ from datetime import datetime
 from pytz import timezone
 
 from todo_list.api.v1.schemas.task import task_fields, task_creation_req_parser, task_update_req_parser, task_exists_req_parser
-from todo_list.models.in_memory.task import task_manager, Task
+from todo_list.models.popo.task import task_manager, Task
 
 
 class IndexResource(Resource):

@@ -1,11 +1,4 @@
-from marshmallow import Schema, fields, pre_load
-from marshmallow import validate
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-
-
-db = SQLAlchemy()  # create the SQLAlchemy instance before the Marshmallow instance
-ma = Marshmallow()
+from todo_list.app import db
 
 
 class AddUpdateDelete():
@@ -32,13 +25,3 @@ class Task(db.Model, AddUpdateDelete):
         self.content = content
         self.creation_date = creation_date
         self.completed = False
-
-
-# Flask-Marshmallow features allow to automatically determine the type for each attribute
-# based on the fields declared in a model
-class TaskSchema(ma.Schema):
-    id = fields.Integer(dump_only=True)  # read-only
-    content = fields.String(required=True, validate=validate.Length(1))  # minimum length of 1 characters
-    creation_date = fields.DateTime()
-    completed = fields.Boolean()
-    url = ma.URLFor('api_v2.taskresource', id='<id>', _external=True)

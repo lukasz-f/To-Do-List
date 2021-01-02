@@ -1,6 +1,6 @@
 from flask_restful import fields, reqparse
 
-from todo_list.models.in_memory.task import task_manager
+from todo_list.models.popo.task import task_manager
 
 task_fields = {
     'id': fields.Integer,
