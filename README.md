@@ -1,4 +1,6 @@
-## To-Do-List
+# To-Do List
+
+## Description
 
 ### Python + REST + API Versioning + Flask + Flask-RESTful + Marshmallow + SQLAlchemy + SQLite + unittest
 
@@ -11,9 +13,23 @@
 
 ### Prerequisites
 - Python 3.8
-- pyenv
-- virtualenv
+- pyenv + virtualenv
+- pip ins
 
 ### App versions
 - v1: simple in-memory dictionary implementation
 - v2: SQLite implementation
+
+## Run project
+### Flask CLI
+```
+cd To-Do-List
+pyenv virtualenv 3.8.3 todo-list
+pyenv local todo-list
+pip install -r requirements.txt
+flask run
+```
+### Docker-compose
+```
+todo
+```

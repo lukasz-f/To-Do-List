@@ -8,3 +8,5 @@ marshmallow-sqlalchemy==0.24.1
 flask-script==2.0.6
 flask-migrate==2.5.3
 requests==2.25.1
+pytz==2020.5
+python-dotenv==0.15.0
