@@ -41,4 +41,4 @@ class TaskSchema(ma.Schema):
     content = fields.String(required=True, validate=validate.Length(1))  # minimum length of 1 characters
     creation_date = fields.DateTime()
     completed = fields.Boolean()
-    url = ma.URLFor('api.taskresource', id='<id>', _external=True)
+    url = ma.URLFor('api_v2.taskresource', id='<id>', _external=True)

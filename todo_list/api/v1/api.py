@@ -50,6 +50,26 @@ task_fields = {
 }
 
 
+def task_exists(id, name):
+    id = int(id)
+
+    if id not in task_manager.tasks:
+        raise ValueError("Task {0} doesn't exist".format(id))
+
+    return id
+
+
+task_creation_req_parser = reqparse.RequestParser()
+task_creation_req_parser.add_argument('content', type=str, required=True, location='json', help="Content can't be blank")
+
+task_exists_req_parser = reqparse.RequestParser()
+task_exists_req_parser.add_argument('id', type=task_exists, required=True, location='view_args')
+
+task_update_req_parser = task_exists_req_parser.copy()
+task_update_req_parser.add_argument('content', type=str, location='json')
+task_update_req_parser.add_argument('completed', type=bool, location='json')
+
+
 class IndexResource(Resource):
     def get(self):
         return 'To-Do List REST app'
@@ -62,9 +82,7 @@ class TaskListResource(Resource):
 
     @marshal_with(task_fields)
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('content', type=str, required=True, help="Content can't be blank")
-        args = parser.parse_args()
+        args = task_creation_req_parser.parse_args()
         task = Task(
             content=args['content'],
             creation_date=datetime.now(tz=timezone('Europe/Warsaw'))
@@ -74,23 +92,15 @@ class TaskListResource(Resource):
 
 
 class TaskResource(Resource):
-    def abort_if_task_doesnt_exist(self, id):
-        if id not in task_manager.tasks:
-            abort(requests.codes.not_found, content="Task {0} doesn't exist".format(id))
-
     @marshal_with(task_fields)
     def get(self, id):
-        self.abort_if_task_doesnt_exist(id)
+        task_exists_req_parser.parse_args()
         return task_manager.get_task(id)
 
     @marshal_with(task_fields)
     def patch(self, id):
-        self.abort_if_task_doesnt_exist(id)
+        args = task_update_req_parser.parse_args()
         task = task_manager.get_task(id)
-        parser = reqparse.RequestParser()
-        parser.add_argument('content', type=str)
-        parser.add_argument('completed', type=bool)
-        args = parser.parse_args()
         if 'content' in args and args['content'] is not None:
             task.content = args['content']
         if 'completed' in args and args['completed'] is not None:
@@ -98,7 +108,7 @@ class TaskResource(Resource):
         return task
 
     def delete(self, id):
-        self.abort_if_task_doesnt_exist(id)
+        task_exists_req_parser.parse_args()
         return task_manager.delete_task(id), requests.codes.no_content
 
 

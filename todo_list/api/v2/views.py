@@ -35,7 +35,7 @@ class TaskResource(Resource):
             return self.get(id)
         except SQLAlchemyError as e:
             db.session.rollback()
-            resp = jsonify({"error": str(e)})
+            resp = {"error": str(e)}
             return resp, requests.codes.bad_request
 
     def delete(self, id):
@@ -46,14 +46,14 @@ class TaskResource(Resource):
             return response, requests.codes.no_content
         except SQLAlchemyError as e:
             db.session.rollback()
-            resp = jsonify({"error": str(e)})
+            resp = {"error": str(e)}
             return resp, requests.codes.unauthorized
 
 
 class TaskListResource(Resource):
     def get(self):
         tasks = Task.query.all()
-        result = task_schema.dump(tasks, many=True).data
+        result = task_schema.dump(tasks, many=True)
         return result
 
     def post(self):
@@ -71,11 +71,11 @@ class TaskListResource(Resource):
                 creation_date=datetime.now(tz=timezone('Europe/Warsaw')))
             task.add(task)
             query = Task.query.get(task.id)
-            result = task_schema.dump(query).data
+            result = task_schema.dump(query)
             return result, requests.codes.created
         except SQLAlchemyError as e:
             db.session.rollback()
-            resp = jsonify({"error": str(e)})
+            resp = {"error": str(e)}
             return resp, requests.codes.bad_request
 
 
