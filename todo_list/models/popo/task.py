@@ -1,12 +1,13 @@
 from datetime import datetime
+from dataclasses import dataclass
 
 
+@dataclass
 class Task:
-    def __init__(self, content, creation_date):
-        self.id = 0  # We will automatically generate the new id
-        self.content = content
-        self.creation_date = creation_date
-        self.completed = False
+    content: str
+    creation_date: datetime
+    id: int = 0  # We will automatically generate the new id
+    completed: bool = False
 
 
 class TaskManager:
