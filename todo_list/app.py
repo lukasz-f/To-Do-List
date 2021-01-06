@@ -16,10 +16,10 @@ def create_app():
 
     ma.init_app(app)
 
-    from todo_list.api.v1.views import api_v1_bp
+    from todo_list.api.v1.endpoints import api_v1_bp
     app.register_blueprint(api_v1_bp, url_prefix='/api/v1')
 
-    from todo_list.api.v2.views import api_v2_bp
+    from todo_list.api.v2.endpoints import api_v2_bp
     app.register_blueprint(api_v2_bp, url_prefix='/api/v2')
 
     return app

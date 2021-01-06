@@ -57,8 +57,8 @@ class TaskListResource(Resource):
     def get(self):
         tasks = Task.query.all()
 
-        task_schema = TaskSchema()
-        result = task_schema.dump(tasks, many=True)
+        task_schema = TaskSchema(many=True)
+        result = task_schema.dump(tasks)
         return result
 
     def post(self):
