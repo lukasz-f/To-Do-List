@@ -1,8 +1,6 @@
 from datetime import datetime
 from dataclasses import dataclass
 
-from werkzeug.exceptions import NotFound, BadRequest
-
 
 @dataclass
 class Task:
@@ -35,13 +33,11 @@ class TaskManager:
     def delete_task(self, id):
         del(self.tasks[id])
 
-    def task_exists_or_404(self, id):
-        if id not in self.tasks:
-            raise NotFound(f'Task {id} not exists.')
+    def task_exists(self, id):
+        return id in self.tasks
 
-    def task_not_exists_or_404(self, id):
-        if id in self.tasks:
-            raise BadRequest(f'Task {id} already exists.')
+    def task_not_exists(self, id):
+        return not self.task_exists(id)
 
 
 task_manager = TaskManager()

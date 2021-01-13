@@ -3,6 +3,8 @@ from datetime import datetime
 from pytz import timezone
 from http import HTTPStatus
 
+from werkzeug.exceptions import NotFound
+
 from todo_list.api.v1.serializers.task import task_fields
 from todo_list.api.v1.parsers.task import task_creation_req_parser, task_update_req_parser, task_read_req_parser
 from todo_list.models.popo.task import task_manager, Task
@@ -34,13 +36,19 @@ class TaskResource(Resource):
     @marshal_with(task_fields)
     def get(self, id):
         task_read_req_parser.parse_args()
-        task_manager.task_exists_or_404(id)
-        return task_manager.get_task(id)
+
+        if task_manager.task_not_exists(id):
+            raise NotFound(f'Task {id} not exists.')
+
+        task = task_manager.get_task(id)
+        return task
 
     @marshal_with(task_fields)
     def patch(self, id):
         args = task_update_req_parser.parse_args()
-        task_manager.task_exists_or_404(id)
+
+        if task_manager.task_not_exists(id):
+            raise NotFound(f'Task {id} not exists.')
 
         task = task_manager.get_task(id)
         if 'content' in args and args['content'] is not None:
@@ -51,5 +59,8 @@ class TaskResource(Resource):
 
     def delete(self, id):
         task_read_req_parser.parse_args()
-        task_manager.task_exists_or_404(id)
+
+        if task_manager.task_not_exists(id):
+            raise NotFound(f'Task {id} not exists.')
+
         return task_manager.delete_task(id), HTTPStatus.NO_CONTENT

@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import request, make_response
-import requests
+from http import HTTPStatus
 from datetime import datetime
 from pytz import timezone
 from sqlalchemy.exc import SQLAlchemyError
@@ -23,12 +23,12 @@ class TaskResource(Resource):
         task_dict = request.get_json()
         if not task_dict:
             resp = {'message': 'No input data provided'}
-            return resp, requests.codes.bad_request
+            return resp, HTTPStatus.BAD_REQUEST
 
         task_schema = TaskSchema()
         errors = task_schema.validate(task_dict)
         if errors:
-            return errors, requests.codes.bad_request
+            return errors, HTTPStatus.BAD_REQUEST
         try:
             if 'content' in task_dict:
                 task.content = task_dict['content']
@@ -39,18 +39,18 @@ class TaskResource(Resource):
         except SQLAlchemyError as e:
             db.session.rollback()
             resp = {"error": str(e)}
-            return resp, requests.codes.bad_request
+            return resp, HTTPStatus.BAD_REQUEST
 
     def delete(self, id):
         task = Task.query.get_or_404(id)
         try:
             delete = task.delete(task)
             response = make_response()
-            return response, requests.codes.no_content
+            return response, HTTPStatus.NO_CONTENT
         except SQLAlchemyError as e:
             db.session.rollback()
             resp = {"error": str(e)}
-            return resp, requests.codes.unauthorized
+            return resp, HTTPStatus.UNAUTHORIZED
 
 
 class TaskListResource(Resource):
@@ -65,12 +65,12 @@ class TaskListResource(Resource):
         request_dict = request.get_json()
         if not request_dict:
             response = {'message': 'No input data provided'}
-            return response, requests.codes.bad_request
+            return response, HTTPStatus.BAD_REQUEST
 
         task_schema = TaskSchema()
         errors = task_schema.validate(request_dict)
         if errors:
-            return errors, requests.codes.bad_request
+            return errors, HTTPStatus.BAD_REQUEST
         try:
             # create a new Message
             task = Task(
@@ -79,8 +79,8 @@ class TaskListResource(Resource):
             task.add(task)
             query = Task.query.get(task.id)
             result = task_schema.dump(query)
-            return result, requests.codes.created
+            return result, HTTPStatus.CREATED
         except SQLAlchemyError as e:
             db.session.rollback()
             resp = {"error": str(e)}
-            return resp, requests.codes.bad_request
+            return resp, HTTPStatus.BAD_REQUEST
