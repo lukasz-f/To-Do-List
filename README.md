@@ -2,7 +2,7 @@
 
 ## Description
 
-### Python + REST + API Versioning + Flask + Flask-RESTful + Marshmallow + SQLAlchemy + SQLite + unittest
+### Python + Pipenv + REST + API Versioning + Flask + Flask-RESTful + Marshmallow + SQLAlchemy + SQLite + unittest
 
 ### REST API:
 - GET /api/v1/tasks - 200 OK - return all tasks
@@ -21,10 +21,17 @@
 - v2: SQLite implementation
 
 ## Run project
-### Flask CLI
+### Pipenv Flask CLI
 ```
 cd To-Do-List
-pyenv virtualenv 3.8.3 todo-list
+pipenv --python 3.8
+pipenv install
+flask run
+```
+### Pyenv-Virtualenv Flask CLI
+```
+cd To-Do-List
+pyenv virtualenv 3.8 todo-list
 pyenv local todo-list
 pip install -r requirements.txt
 flask run
